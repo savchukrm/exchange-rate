@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
+
+import { compareRate } from './compareRate';
+
+import Conver from './components/Convert';
+
 import './App.css';
-import { gettingRate } from './gettingRate';
 
 function App() {
   const [actualUSD, setActualUSD] = useState(0);
@@ -8,11 +12,11 @@ function App() {
 
   useEffect(() => {
     const getData = async () => {
-      const rateEUR = await gettingRate('EUR', 'UAH', 1);
-      setActualEUR(rateEUR);
+      const rateUSD = await compareRate('USD');
+      setActualUSD(rateUSD.conversion_rate.toFixed(2));
 
-      const rateUSD = await gettingRate('USD', 'UAH', 1);
-      setActualUSD(rateUSD);
+      const rateEUR = await compareRate('EUR');
+      setActualEUR(rateEUR.conversion_rate.toFixed(2));
     };
 
     getData();
@@ -23,16 +27,18 @@ function App() {
       <header className="header">
         <div className="container">
           <div className="header-row">
-            <h1>Exchange rates</h1>
+            <h1>exchange rates</h1>
             <div className="exchange-rate">
-              USD/UAH: {actualUSD.new_amount} | EUR/UAH: {actualEUR.new_amount}
+              USD/UAH: {actualUSD} | EUR/UAH: {actualEUR}
             </div>
           </div>
         </div>
       </header>
 
       <main className="main">
-        <div className="container"></div>
+        <div className="container">
+          <Conver />
+        </div>
       </main>
     </div>
   );
